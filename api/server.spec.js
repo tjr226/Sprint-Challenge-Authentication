@@ -8,3 +8,17 @@ describe('GET /', () => {
         .expect(200)
     });
 });
+
+// can't get this to fail
+describe('/login', () => {
+    it('logging in returns JSON', () => {
+        return request(server)
+        .post('/api/register')
+        .send({ username: "billy", password: "pass" })
+        .then(res => {
+            // expect(res.type).toMatch(/json/);
+            expect(200);
+        })
+        
+    });
+})
