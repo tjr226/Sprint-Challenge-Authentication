@@ -38,11 +38,11 @@ Hashes the passwords so we don't store in plaintext (and probably lots more)
 
 1. What does bcrypt do to slow down attackers?
 
-Hashes it 2^x times
+Hashes the password 2^x times
 
 1. What are the three parts of the JSON Web Token?
 
-
+Header Payload Signature
 
 ## Project Set Up
 
