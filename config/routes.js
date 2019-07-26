@@ -9,11 +9,16 @@ const secrets = require('./secrets.js');
 const { authenticate } = require('../auth/authenticate');
 
 module.exports = server => {
+  server.get('/', getApi);
   server.post('/api/register', register);
   server.post('/api/login', login);
   server.get('/api/jokes', authenticate, getJokes);
   server.get('/api/users', getUsers);
 };
+
+function getApi(req, res) {
+  res.status(200).json({ message: "API working" });
+}
 
 function register(req, res) {
     let user = req.body;
@@ -32,15 +37,11 @@ function register(req, res) {
 
 function login(req, res) {
   const { username, password } = req.body;
-  console.log("in login function")
   Users.findBy({ username })
     .first()
     .then(user => {
-      console.log("in then");
       if (user && bcrypt.compareSync(password, user.password)) {
-        console.log("passwords match");
-        const token = generateToken(user);
-        console.log("token generated", token);
+                const token = generateToken(user);
         res.status(200).json({
           message: `Welcome ${user.username}`,
           token
@@ -77,7 +78,7 @@ function getJokes(req, res) {
 }
 
 function generateToken(user) {
-  console.log("in generate token");
+  // console.log("in generate token");
   const payload = {
     subject: user.id,
     username: user.username,
@@ -87,9 +88,5 @@ function generateToken(user) {
     expiresIn: '1d',
   };
 
-  console.log("about to return token");
-  console.log("payload", payload);
-  console.log("jwt secret", secrets.jwtSecret);
-  console.log("options", options);
   return jwt.sign(payload, secrets.jwtSecret, options);
 }
